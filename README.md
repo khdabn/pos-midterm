@@ -1,44 +1,49 @@
-# POS System - CodeIgniter 4
+# Tasks for Today Management System
 
-A basic Point-of-Sale web application developed using CodeIgniter 4 and MySQL.
+A simple task management web application developed using CodeIgniter 4 and MySQL for IT0049 - Web System Technologies.
 
 ## Features
 
-- Landing Page
-- About Page
-- Customer Accounts
-- User Accounts
+- Welcome page showing today's tasks only
+- Full Task List showing all tasks ordered by date
+- Profile page displaying a demo user
+- About page identifying the developer
 - MySQL database integration
-- CodeIgniter Models, Views, and Controllers
+- MVC architecture using Models, Views, and Controllers
 
 ## Database
 
-Database name: `pos_db`
+Database name: `tasks_db`
 
 Tables:
-- `customers`
+- `tasks`
 - `users`
 
-The database export is included as `pos_db.sql`.
+The database export is included in `tasks_db.sql`.
+
+## Pages
+
+- `/` - Tasks for Today
+- `/tasks` - Full Task List
+- `/profile` - Demo User Profile
+- `/about` - About the Developer
 
 ## How to Run
 
 1. Install XAMPP and Composer.
 2. Place the project inside the XAMPP `htdocs` folder.
-3. Start Apache and MySQL.
-4. Create a database named `pos_db` in phpMyAdmin.
-5. Import `pos_db.sql`.
-6. Configure the database connection in `.env`.
-7. Open CMD inside the project folder.
-8. Run:
+3. Start MySQL in XAMPP.
+4. Open phpMyAdmin.
+5. Create a database named `tasks_db`.
+6. Import `tasks_db.sql`.
+7. Configure the database connection in `.env`.
+8. Open Command Prompt inside the project folder.
+9. Run:
 
    php spark serve
 
-9. Open `http://localhost:8080` in a browser.
+10. Open `http://localhost:8080` in your browser.
 
-## Pages
+## Developer
 
-- `/` - Home
-- `/about` - About
-- `/customers` - Customer Accounts
-- `/users` - User Accounts
+Angelo Buen
