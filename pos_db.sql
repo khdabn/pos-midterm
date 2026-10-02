@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2026 at 02:57 PM
+-- Generation Time: Oct 02, 2026 at 08:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,8 @@ INSERT INTO `customers` (`id`, `full_name`, `email`, `phone`, `created_at`) VALU
 (2, 'Maria Santos', 'maria@example.com', '09181234567', '2026-09-25 20:39:29'),
 (3, 'Carlos Reyes', 'carlos@example.com', '09191234567', '2026-09-25 20:39:29'),
 (4, 'Ana Garcia', 'ana@example.com', '09201234567', '2026-09-25 20:39:29'),
-(5, 'Mark Torres', 'mark@example.com', '09211234567', '2026-09-25 20:39:29');
+(5, 'Mark Torres', 'mark@example.com', '09211234567', '2026-09-25 20:39:29'),
+(6, 'Test Customer', 'testcustomer@example.com', '09123456789', '2026-10-02 06:02:14');
 
 -- --------------------------------------------------------
 
@@ -56,19 +57,21 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `full_name` varchar(100) NOT NULL,
-  `created_at` datetime NOT NULL
+  `created_at` datetime NOT NULL,
+  `avatar` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `full_name`, `created_at`) VALUES
-(1, 'admin01', 'John Admin', '2026-09-25 20:39:29'),
-(2, 'cashier01', 'Maria Lopez', '2026-09-25 20:39:29'),
-(3, 'cashier02', 'Kevin Cruz', '2026-09-25 20:39:29'),
-(4, 'manager01', 'Sarah Reyes', '2026-09-25 20:39:29'),
-(5, 'staff01', 'Daniel Santos', '2026-09-25 20:39:29');
+INSERT INTO `users` (`id`, `username`, `full_name`, `created_at`, `avatar`) VALUES
+(1, 'admin01', 'Dio Estandarte', '2026-09-25 20:39:29', '1790922598_d22cd413ca456677accf.jpg'),
+(2, 'cashier01', 'Maria Lopez', '2026-09-25 20:39:29', NULL),
+(3, 'cashier02', 'Kevin Cruz', '2026-09-25 20:39:29', NULL),
+(4, 'manager01', 'Sarah Reyes', '2026-09-25 20:39:29', NULL),
+(5, 'staff01', 'Daniel Santos', '2026-09-25 20:39:29', NULL),
+(6, 'cashier03', 'Michael Cruz', '2026-10-02 06:05:47', NULL);
 
 --
 -- Indexes for dumped tables
@@ -95,13 +98,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
