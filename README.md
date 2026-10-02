@@ -1,68 +1,147 @@
-# POS System - TFA3
+# Complete Point-of-Sale System
 
-A Point-of-Sale account management application developed using CodeIgniter 4 and MySQL for IT0049 - Web System Technologies.
+A complete Point-of-Sale management system developed using CodeIgniter 4 and MySQL for the IT0049 Web System Technologies Midterm Project.
 
 ## Features
 
-- Customer Accounts listing
-- User Accounts listing
-- Add new customers
-- Add new users
+### Product Management
+- View products
+- Add products
+- Edit products
+- Delete products
+- Product image upload
+- JPG/PNG image validation
+- Maximum image size of 2MB
+- Display-ready product images
+- Stock quantity management
+- Low-stock indicators
+
+### Customer Management
+- View customers
+- Add customers
+- Edit customers
+- Delete customers
 - Form validation
-- Unique username validation
-- Edit and update customers
-- Edit and update users
-- User avatar upload
-- JPG and PNG image validation
-- Maximum avatar size of 2MB
-- Prepared 300x300 avatar images
-- Placeholder avatar for users without a profile picture
-- MySQL database integration
-- CodeIgniter MVC architecture
+
+### Staff Management
+- View staff accounts
+- Add staff
+- Edit staff
+- Delete staff
+- Unique usernames
+- Hashed passwords
+- Avatar upload
+- JPG/PNG avatar validation
+- Display-ready avatars
+
+### Authentication
+- Staff login
+- Password verification
+- Session-based authentication
+- Logout
+- Protected management pages
+
+### Sales
+- Record a sale
+- Select a product
+- Optional customer selection
+- Walk-in customer support
+- Quantity validation
+- Automatic total price calculation
+- Automatic inventory reduction
+- Prevents selling more than available stock
+- Sales History
+- Records the staff member who completed each sale
 
 ## Database
 
-Database name: `pos_db`
+Database name:
+
+`pos_midterm_db`
 
 Tables:
+
+- `products`
 - `customers`
 - `users`
+- `sales`
 
-The database export is included as `pos_db.sql`.
+The database export is included as:
+
+`pos_midterm_db.sql`
 
 ## Main Pages
 
-- `/customers` - Customer Accounts
+- `/login` - Staff Login
+- `/products` - Product Management
+- `/products/new` - Add Product
+- `/customers` - Customer Management
 - `/customers/new` - Add Customer
-- `/users` - User Accounts
-- `/users/new` - Add User
+- `/users` - Staff Management
+- `/users/new` - Add Staff
+- `/sales/new` - Record Sale
+- `/sales` - Sales History
 
-Edit pages are accessed through the Edit links beside existing records.
+All management pages require authentication.
 
-## How to Run
+## Demo Login
+
+Username:
+
+`admin01`
+
+Password:
+
+`password123`
+
+The password is stored as a hash in the database.
+
+## How to Run Locally
 
 1. Install XAMPP and Composer.
 2. Place the project inside the XAMPP `htdocs` folder.
-3. Start MySQL in XAMPP.
+3. Start MySQL using XAMPP.
 4. Open phpMyAdmin.
-5. Create a database named `pos_db`.
-6. Import `pos_db.sql`.
+5. Create a database named `pos_midterm_db`.
+6. Import `pos_midterm_db.sql`.
 7. Configure the database connection in `.env`.
-8. Open Command Prompt inside the project folder.
+8. Open Command Prompt inside the project directory.
 9. Run:
 
-   php spark serve --port 8081
+   `php spark serve --port 8083`
 
-10. Open `http://localhost:8081/customers` in a browser.
+10. Open:
 
-## Avatar Upload
+   `http://localhost:8083`
 
-User avatars are stored in:
+## Product Images
+
+Product images are stored in:
+
+`public/uploads/products`
+
+Only JPG and PNG files up to 2MB are accepted. Images are prepared as display-ready images, while only the filename is stored in MySQL.
+
+## Staff Avatars
+
+Staff avatars are stored in:
 
 `public/uploads/avatars`
 
-Only JPG and PNG images up to 2MB are accepted. Uploaded images are prepared as 300x300 images, and only the filename is stored in the database.
+Only JPG and PNG files up to 2MB are accepted. Passwords are stored using secure PHP password hashing.
+
+## Sales Workflow
+
+When a sale is recorded:
+
+1. The selected product is checked for available stock.
+2. The requested quantity must be greater than zero.
+3. The system rejects quantities greater than the available stock.
+4. The total price is calculated using product price × quantity.
+5. The sale is stored in the `sales` table.
+6. The product stock quantity is reduced.
+7. The logged-in staff member is recorded as the seller.
 
 ## Developer
 
-ANGELO BUEN
+GROUP 4
