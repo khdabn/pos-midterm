@@ -90,5 +90,18 @@ public function update($id)
 
     return redirect()->to('/customers');
 }
-	
+	public function delete($id)
+{
+    $customerModel = new CustomerModel();
+
+    $customer = $customerModel->find($id);
+
+    if (!$customer) {
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+    }
+
+    $customerModel->delete($id);
+
+    return redirect()->to('/customers');
+}
 }

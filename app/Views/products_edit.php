@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Staff | POS System</title>
+    <title>Edit Product | POS System</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -28,12 +28,12 @@
 
     <div class="page-header">
         <div>
-            <h1>Edit Staff</h1>
-            <p>Update staff account information.</p>
+            <h1>Edit Product</h1>
+            <p>Update product details, inventory, or image.</p>
         </div>
 
-        <a href="/users" class="btn btn-secondary">
-            Back to Staff
+        <a href="/products" class="btn btn-secondary">
+            Back to Products
         </a>
     </div>
 
@@ -45,22 +45,22 @@
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($user['avatar'])): ?>
+        <?php if (!empty($product['image'])): ?>
 
             <div class="form-group">
-                <label>Current Avatar</label>
+                <label>Current Product Image</label>
 
                 <img
-                    src="/uploads/avatars/<?= esc($user['avatar']) ?>"
-                    class="avatar"
-                    alt="Current Avatar"
+                    src="/uploads/products/<?= esc($product['image']) ?>"
+                    class="product-image"
+                    alt="<?= esc($product['name']) ?>"
                 >
             </div>
 
         <?php endif; ?>
 
         <form
-            action="/users/update/<?= $user['id'] ?>"
+            action="/products/update/<?= $product['id'] ?>"
             method="post"
             enctype="multipart/form-data"
         >
@@ -68,55 +68,54 @@
             <?= csrf_field() ?>
 
             <div class="form-group">
-                <label>Username</label>
+                <label>Product Name</label>
 
                 <input
                     type="text"
-                    name="username"
-                    value="<?= old('username', $user['username']) ?>"
+                    name="name"
+                    value="<?= old('name', $product['name']) ?>"
                 >
             </div>
 
             <div class="form-group">
-                <label>Full Name</label>
+                <label>Price</label>
 
                 <input
-                    type="text"
-                    name="full_name"
-                    value="<?= old('full_name', $user['full_name']) ?>"
+                    type="number"
+                    name="price"
+                    step="0.01"
+                    min="0"
+                    value="<?= old('price', $product['price']) ?>"
                 >
             </div>
 
             <div class="form-group">
-                <label>New Password</label>
+                <label>Stock Quantity</label>
 
                 <input
-                    type="password"
-                    name="password"
-                    placeholder="Enter a new password"
+                    type="number"
+                    name="stock_quantity"
+                    min="0"
+                    value="<?= old('stock_quantity', $product['stock_quantity']) ?>"
                 >
-
-                <small>
-                    Leave blank to keep the current password.
-                </small>
             </div>
 
             <div class="form-group">
-                <label>Replace Avatar</label>
+                <label>Replace Product Image</label>
 
                 <input
                     type="file"
-                    name="avatar"
+                    name="image"
                     accept=".jpg,.jpeg,.png"
                 >
 
                 <small>
-                    Leave blank to keep the current avatar. JPG or PNG, maximum 2 MB.
+                    Leave blank to keep the current image. JPG or PNG, maximum 2 MB.
                 </small>
             </div>
 
             <button type="submit" class="btn btn-primary">
-                Update Staff
+                Update Product
             </button>
 
         </form>

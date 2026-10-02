@@ -24,7 +24,11 @@ class Users extends BaseController
     {
         $rules = [
             'username'  => 'required|is_unique[users.username]',
-            'full_name' => 'required'
+            'full_name' => 'required',
+            'password'  => 'required|min_length[6]',
+            'avatar' => [
+                'rules' => 'permit_empty|uploaded[avatar]|max_size[avatar,2048]|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png]'
+            ]
         ];
 
         if (!$this->validate($rules)) {
@@ -33,87 +37,133 @@ class Users extends BaseController
             ]);
         }
 
-        $userModel = new UserModel();
-
-        $userModel->insert([
+        $data = [
             'username'   => $this->request->getPost('username'),
             'full_name'  => $this->request->getPost('full_name'),
+            'password'   => password_hash(
+                $this->request->getPost('password'),
+                PASSWORD_DEFAULT
+            ),
             'created_at' => date('Y-m-d H:i:s')
-        ]);
+        ];
+
+        $avatar = $this->request->getFile('avatar');
+
+        if ($avatar && $avatar->isValid() && !$avatar->hasMoved()) {
+            $newName = $avatar->getRandomName();
+
+            $avatar->move(
+                FCPATH . 'uploads/avatars',
+                $newName
+            );
+
+            \Config\Services::image()
+                ->withFile(FCPATH . 'uploads/avatars/' . $newName)
+                ->fit(300, 300, 'center')
+                ->save(FCPATH . 'uploads/avatars/' . $newName);
+
+            $data['avatar'] = $newName;
+        }
+
+        $userModel = new UserModel();
+        $userModel->insert($data);
 
         return redirect()->to('/users');
     }
-	public function edit($id)
-{
-    $userModel = new UserModel();
 
-    $user = $userModel->find($id);
+    public function edit($id)
+    {
+        $userModel = new UserModel();
+        $user = $userModel->find($id);
 
-    if (!$user) {
-        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-    }
+        if (!$user) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
 
-    return view('users_edit', [
-        'user' => $user
-    ]);
-}
-
-public function update($id)
-{
-    $userModel = new UserModel();
-    $user = $userModel->find($id);
-
-    if (!$user) {
-        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-    }
-
-    $rules = [
-        'username' => "required|is_unique[users.username,id,{$id}]",
-        'full_name' => 'required',
-        'avatar' => [
-            'rules' => 'permit_empty|uploaded[avatar]|max_size[avatar,2048]|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png]',
-            'errors' => [
-                'max_size' => 'The avatar must not be larger than 2MB.',
-                'is_image' => 'The uploaded file must be an image.',
-                'mime_in'  => 'Only JPG and PNG images are allowed.'
-            ]
-        ]
-    ];
-
-    if (!$this->validate($rules)) {
         return view('users_edit', [
-            'user' => $user,
-            'validation' => $this->validator
+            'user' => $user
         ]);
     }
 
-    $data = [
-        'username'  => $this->request->getPost('username'),
-        'full_name' => $this->request->getPost('full_name')
-    ];
+    public function update($id)
+    {
+        $userModel = new UserModel();
+        $user = $userModel->find($id);
 
-    $avatar = $this->request->getFile('avatar');
+        if (!$user) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
 
-    if ($avatar && $avatar->isValid() && !$avatar->hasMoved()) {
+        $rules = [
+            'username'  => "required|is_unique[users.username,id,{$id}]",
+            'full_name' => 'required',
+            'password'  => 'permit_empty|min_length[6]',
+            'avatar' => [
+                'rules' => 'permit_empty|uploaded[avatar]|max_size[avatar,2048]|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png]'
+            ]
+        ];
 
-        $newName = $avatar->getRandomName();
+        if (!$this->validate($rules)) {
+            return view('users_edit', [
+                'user'       => $user,
+                'validation' => $this->validator
+            ]);
+        }
 
-        $avatar->move(
-            FCPATH . 'uploads/avatars',
-            $newName
-        );
+        $data = [
+            'username'  => $this->request->getPost('username'),
+            'full_name' => $this->request->getPost('full_name')
+        ];
 
-        $image = \Config\Services::image()
-            ->withFile(FCPATH . 'uploads/avatars/' . $newName);
+        $password = $this->request->getPost('password');
 
-        $image->fit(300, 300, 'center')
-              ->save(FCPATH . 'uploads/avatars/' . $newName);
+        if (!empty($password)) {
+            $data['password'] = password_hash(
+                $password,
+                PASSWORD_DEFAULT
+            );
+        }
 
-        $data['avatar'] = $newName;
+        $avatar = $this->request->getFile('avatar');
+
+        if ($avatar && $avatar->isValid() && !$avatar->hasMoved()) {
+            $newName = $avatar->getRandomName();
+
+            $avatar->move(
+                FCPATH . 'uploads/avatars',
+                $newName
+            );
+
+            \Config\Services::image()
+                ->withFile(FCPATH . 'uploads/avatars/' . $newName)
+                ->fit(300, 300, 'center')
+                ->save(FCPATH . 'uploads/avatars/' . $newName);
+
+            $data['avatar'] = $newName;
+        }
+
+        $userModel->update($id, $data);
+
+        return redirect()->to('/users');
     }
 
-    $userModel->update($id, $data);
+    public function delete($id)
+    {
+        // Prevent the logged-in user from deleting their own account.
+        if ((int) session()->get('user_id') === (int) $id) {
+            return redirect()->to('/users');
+        }
 
-    return redirect()->to('/users');
-}
+        $userModel = new UserModel();
+
+        $user = $userModel->find($id);
+
+        if (!$user) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $userModel->delete($id);
+
+        return redirect()->to('/users');
+    }
 }

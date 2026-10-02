@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Customer | POS System</title>
+    <title>Add Product | POS System</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -28,12 +28,12 @@
 
     <div class="page-header">
         <div>
-            <h1>Edit Customer</h1>
-            <p>Update customer information.</p>
+            <h1>Add Product</h1>
+            <p>Add a new product to your inventory.</p>
         </div>
 
-        <a href="/customers" class="btn btn-secondary">
-            Back to Customers
+        <a href="/products" class="btn btn-secondary">
+            Back to Products
         </a>
     </div>
 
@@ -45,42 +45,56 @@
             </div>
         <?php endif; ?>
 
-        <form action="/customers/update/<?= $customer['id'] ?>" method="post">
+        <form
+            action="/products/create"
+            method="post"
+            enctype="multipart/form-data"
+        >
 
             <?= csrf_field() ?>
 
             <div class="form-group">
-                <label>Full Name</label>
-
+                <label>Product Name</label>
                 <input
                     type="text"
-                    name="full_name"
-                    value="<?= old('full_name', $customer['full_name']) ?>"
+                    name="name"
+                    value="<?= old('name') ?>"
                 >
             </div>
 
             <div class="form-group">
-                <label>Email</label>
-
+                <label>Price</label>
                 <input
-                    type="email"
-                    name="email"
-                    value="<?= old('email', $customer['email']) ?>"
+                    type="number"
+                    name="price"
+                    step="0.01"
+                    min="0"
+                    value="<?= old('price') ?>"
                 >
             </div>
 
             <div class="form-group">
-                <label>Phone</label>
-
+                <label>Stock Quantity</label>
                 <input
-                    type="text"
-                    name="phone"
-                    value="<?= old('phone', $customer['phone']) ?>"
+                    type="number"
+                    name="stock_quantity"
+                    min="0"
+                    value="<?= old('stock_quantity') ?>"
                 >
+            </div>
+
+            <div class="form-group">
+                <label>Product Image</label>
+                <input
+                    type="file"
+                    name="image"
+                    accept=".jpg,.jpeg,.png"
+                >
+                <small>JPG or PNG, maximum 2 MB.</small>
             </div>
 
             <button type="submit" class="btn btn-primary">
-                Update Customer
+                Add Product
             </button>
 
         </form>
